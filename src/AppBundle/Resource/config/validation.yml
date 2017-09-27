@@ -1,0 +1,9 @@
+AppBundle\Entity\Task:
+
+  properies:
+    task:
+      - NotBlank: ~
+
+    dueDate:
+      - NotBlank: ~
+      - Type: \DateTime
