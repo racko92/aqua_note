@@ -2,16 +2,21 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class GenusController extends Controller
 {
-    /**
-     * @Route("/genus/{genusName}")
-     */
+
     public function showAction($genusName)
     {
         $notes = [
@@ -27,10 +32,6 @@ class GenusController extends Controller
 
     }
 
-    /**
-     * @Route("/genus/{genusName}/notes", name="genus_show_notes")
-     * @Method("GET")
-     */
     public function getNotesAction()
     {
 
@@ -45,5 +46,33 @@ class GenusController extends Controller
         ];
 
         return new JsonResponse($data);
+    }
+
+
+    public function newAction(Request $request)
+    {
+        $task = new Task();
+
+        $form = $this->createFormBuilder($task)
+            ->add('task', TextType::class)
+            ->add('dueDate', DateType::class)
+            ->add('save', SubmitType::class, [
+                'label' => 'Create Post'
+            ])->getForm();
+
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $task = $form->getData();
+
+
+            return $this->redirectToRoute('task_success');
+
+        }
+
+        return $this->render('genus/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

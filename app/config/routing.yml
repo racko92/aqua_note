@@ -1,3 +1,16 @@
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+aqua_form:
+  path: /genus/form
+  defaults: { _controller: AppBundle:Genus:new }
+
+genus_name:
+  path: /genus/{genusName}
+  defaults: { _controller: AppBundle:Genus:show }
+
+genus_show_notes:
+  path: /genus/{genusName}/notes
+  methods: [GET]
+  defaults: { _controller: AppBundle:Genus:getNotes }
